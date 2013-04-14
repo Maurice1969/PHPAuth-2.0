@@ -12,58 +12,46 @@ class fr extends Handler
 
     public function getActivationEmail()
     {
-        $email['subject'] = 'Activation de compte';
+        $email = array();
+        
+        $email['subject'] = 'PHPAuth 2.0 : Activation du compte necessaire';
 
-        $email['head'] = "'MIME-Version: 1.0' 'Content-type: text/html; charset=iso-8859-1'";
+        $email['head']  = 'MIME-Version: 1.0' . "\r\n";
+        $email['head'] .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $email['head'] .= 'From: PHPAuth 2.0 <no-reply@phpauth.cuonic.com>' . "\r\n";
 
-        $email['body'] = <<<BODY
-Bonjour,
-<br/>
-<br/>
-Vous avez cr&eacute;e un compte utilisateur sur le site PHPAuth 2.0.
-<br/>
-Afin de pouvoir utiliser votre compte, vous devez d'abord l'activer en utilisant le lien suivant :
-<br/>
-<br/>
-<strong>
-    <a href="{$this->data['base_url']}?page=activate&key={$this->data['key']}" target=\_blank">Activer mon compte</a>
-</strong>
-<br/>
-<br/>
-Ou sinon, visitez <a href="{$this->data['base_url']}?page=activate" target="_blank">cette page</a> et copiez / collez le code suivant : <strong>{$this->data['key']}</strong>
-<br/>
-<br/>
-Rappel : Cette cl&eacute; unique d'activation expirera dans les 24 heures suivant la cr&eacute;ation du compte.
-BODY;
+        $email['body'] = 'Bonjour,' . "\r\n";
+        $email['body'] .= '<br/><br/>' . "\r\n";
+        $email['body'] .= 'Vous avez r&eacute;cemment cr&eacute;e un compte sur PHPAuth 2.0.' . "\r\n";
+        $email['body'] .= '<br/>' . "\r\n";
+        $email['body'] .= 'Pour pouvoir utiliser votre compte, vous devez d\'abord l\'activer avec le lien suivant : <strong><a href="' . $this->data['base_url'] .'?page=activate&key=' . $this->data['key'] . '" target="_blank">Activer mon compte</a></strong>' . "\r\n";
+        $email['body'] .= '<br/><br/>' . "\r\n";
+        $email['body'] .= 'Ou sinon, cliquez <a href="' . $this->data['base_url'] . '?page=activate" target="_blank">ici</a> et copiez / collez la cl&eacute; suivante : <strong>' . $this->data['key'] . '</strong>' . "\r\n";
+        $email['body'] .= '<br/><br/>' . "\r\n";
+        $email['body'] .= 'Rappel : Cette cl&eacute; unique d\'activation expirera dans les 24 heures suivant la cr&eacute;ation du compte.' . "\r\n";
 
         return $email;
     }
 
     public function getResetEmail()
     {
-        $email['subject'] = 'Demande de r&eacute;initialisation de mot de passe';
+        $email = array();
+        
+        $email['subject'] = 'PHPAuth 2.0 : Demande de r&eacute;initialisation du mot de passe';
 
-        $email['head'] = "'MIME-Version: 1.0' 'Content-type: text/html; charset=iso-8859-1'";
+        $email['head']  = 'MIME-Version: 1.0' . "\r\n";
+        $email['head'] .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $email['head'] .= 'From: PHPAuth 2.0 <no-reply@phpauth.cuonic.com>' . "\r\n";
 
-        $email['body'] = <<<BODY
-Hello,
-<br/>
-<br/>
-Vous avez recemment demand&eacute; la r&eacute;initialisation de votre mot de passe sur le site PHPAuth 2.0.
-<br/>
-Pour proceder avec la r&eacute;initialisation, cliquez sur le lien suivant :
-<br/>
-<br/>
-<strong>
-    <a href="{$this->data['base_url']}?page=reset&step=2&key={$this->data['key']}" target="_blank">R&eacute;initialiser mon mot de passe</a>
-</strong>
-<br/>
-<br/>
-Ou sinon, visitez <a href="{$this->data['base_url']}?page=reset&step=2" target="_blank">cette page</a> et copiez / collez le code suivant : <strong>{$this->base['key']}</strong>
-<br/>
-<br/>
-Rappel : Cette cl&eacute; unique de r&eacute;initialisation expirera dans les 24 heures suivant la demande de r&eacute;initialisation.
-BODY;
+        $email['body'] = 'Bonjour,' . "\r\n";
+        $email['body'] .= '<br/><br/>' . "\r\n";
+        $email['body'] .= 'Vous avez demand&eacute; la r&eacute;initialisation du mot de passe sur PHPAuth 2.0' . "\r\n";
+        $email['body'] .= '<br/>' . "\r\n";
+        $email['body'] .= 'Pour continuer avec la r&eacute;initialisation du mot de passe, utilisez le lien suivant : <strong><a href="' . $this->data['base_url'] .'?page=reset&step=2&key=' . $this->data['key'] . '" target="_blank">R&eacute;initialiser mon mot de passe</a></strong>' . "\r\n";
+        $email['body'] .= '<br/><br/>' . "\r\n";
+        $email['body'] .= 'Ou sinon, cliquez <a href="' . $this->data['base_url'] . '?page=reset&step=2" target="_blank">ici</a> et copiez / collez la cl&eacute; suivante : <strong>' . $this->data['key'] . '</strong>' . "\r\n";
+        $email['body'] .= '<br/><br/>' . "\r\n";
+        $email['body'] .= 'Rappel : Cette cl&eacute; unique de r&eacute;initialisation expirera dans les 24 heures suivant la demande de r&eacute;initialisation.' . "\r\n";
 
         return $email;
     }

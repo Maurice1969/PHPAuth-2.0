@@ -2,7 +2,7 @@
 namespace cuonic\PHPAuth2;
 
 require_once 'config.php';
-require_once 'Localization\Handler.php';
+require_once 'Localization/Handler.php';
 
 class Auth
 {
@@ -250,7 +250,7 @@ class Auth
                     return $return;
                 } else {
                     if (!$this->isUserActivated($row['uid'])) {
-                        $expiredate = strtotime($row['$expiredate']);
+                        $expiredate = strtotime($row['expiredate']);
                         $currentdate = strtotime(date("Y-m-d H:i:s"));
 
                         if ($currentdate < $expiredate) {
@@ -444,8 +444,6 @@ class Auth
     {
         $data = array();
 
-        $data['username'] = $username;
-
         $query = $this->dbh->prepare("SELECT id, password, email, salt, lang, isactive FROM ".$this->config->table_users." WHERE username = ?");
         $query->execute(array($username));
         $data = $query->fetch(\PDO::FETCH_ASSOC);       
@@ -453,6 +451,7 @@ class Auth
         if (!$data) {
             return false;
         } else {
+			$data['username'] = $username;
 			$data['uid'] = $data['id'];
 			
             return $data;
@@ -748,7 +747,7 @@ class Auth
         $query = $this->dbh->prepare("SELECT * FROM ".$this->config->table_users." WHERE email = ?");
         $query->execute(array($email));
 
-        if (count($query->fetch())) {
+        if ($query->rowCount() == 0) {
             return false;
         } else {
             return true;
@@ -766,7 +765,7 @@ class Auth
         $query = $this->dbh->prepare("SELECT * FROM ".$this->config->table_users." WHERE username = ?");
         $query->execute(array($username));
 
-        if (count($query->fetch())) {
+        if ($query->rowCount() == 0) {
             return false;
         } else {
             return true;
@@ -912,8 +911,6 @@ class Auth
 
             $query = $this->dbh->prepare("INSERT INTO ".$this->config->table_resets." (uid, resetkey, expiredate) VALUES (?, ?, ?)");
             $return = $query->execute(array($uid, $resetkey, $expiredate));
-
-
 
             if ($return) {
                 $emailTemplate = new Localization\Handler(array(
@@ -1418,9 +1415,9 @@ class Auth
                             return $return;
                         } else {
                             $query = $this->dbh->prepare("UPDATE ".$this->config->table_users." SET email = ? WHERE id = ?");
-                            $return = $query->execute(array($email, $uid));
+                            $row = $query->execute(array($email, $uid));
 
-                            if (!$return) {
+                            if (!$row) {
                                 return false;
                             }
 
@@ -1667,7 +1664,7 @@ class Auth
 
     public function putLang($hash, $lang)
     {
-       $query = $this->dbh->prepare("UPDATE ".$this->config->table_sessions." SET lang = ? WHERE hash = ?");
+		$query = $this->dbh->prepare("UPDATE ".$this->config->table_sessions." SET lang = ? WHERE hash = ?");
         $query->execute(array($lang, $hash));
 
         if ($query->rowCount() == 0) {
