@@ -1691,8 +1691,6 @@ class Auth
     {
         $language_accepted = $this->config->lang_list;
         
-        $language_default = $this->config->lang;
-        
         $accept_lang = preg_split('",|;"', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         
         if(in_array($accept_lang[0], $language_accepted)) {
