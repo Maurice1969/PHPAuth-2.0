@@ -7,7 +7,8 @@ class Config
     private $lang_list = array(
             'en',
             'fr',
-            'es'
+            'es',
+            'nl'
         );
     private $base_url = 'http://example.com/phpauth2.0/';
     private $salt_1 = 'us_1dUDN4N-53/dkf7Sd?vbc_due1d?df!feg';
