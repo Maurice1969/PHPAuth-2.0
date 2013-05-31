@@ -14,7 +14,7 @@ class fr extends Handler
     {
         $email = array();
         
-        $email['subject'] = 'PHPAuth 2.0 : Activation du compte necessaire';
+        $email['subject'] = 'PHPAuth 2.0 : Activation du compte n&eacute;cessaire';
 
         $email['head']  = 'MIME-Version: 1.0' . "\r\n";
         $email['head'] .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
