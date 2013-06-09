@@ -30,7 +30,7 @@ class Auth
     * @return array $return
     */
 
-    public function login($username, $password, $rememberme)
+    public function login($username, $password, $rememberme = 0)
     {
         $return = array();
 
@@ -82,6 +82,7 @@ class Auth
 
                             $return['code'] = 4;
                             $return['session_hash'] = $sessiondata['hash'];
+                            $return['expire'] = $sessiondata['expire'];
 
                             $this->addNewLog(
                                 $userdata['uid'],
