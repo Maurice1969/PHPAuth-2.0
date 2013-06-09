@@ -25,6 +25,7 @@ class Config
     private $table_resets = 'resets';
     private $table_sessions = 'sessions';
     private $table_users = 'users';
+    private $session_duration = "+1 month";
 
     public function __get($name)
     {

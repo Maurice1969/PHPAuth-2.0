@@ -26,10 +26,11 @@ class Auth
     * Logs a user in
     * @param string $username
     * @param string $password (MUST be already twice hashed with SHA1 : Ideally client side with JS)
+    * @param bool $rememberme
     * @return array $return
     */
 
-    public function login($username, $password)
+    public function login($username, $password, $rememberme)
     {
         $return = array();
 
@@ -66,7 +67,18 @@ class Auth
                 if ($userdata = $this->getUserData($username)) {
                     if ($password === $userdata['password']) {
                         if ($userdata['isactive'] == 1) {
-                            $sessiondata = $this->addNewSession($userdata['uid']);
+
+                            if ($rememberme == 1) {
+                                $sessiondata = $this->addNewSession($userdata['uid'], $this->config->session_duration);
+                            }
+                            elseif ($rememberme == 0) {
+                                $sessiondata = $this->addNewSession($userdata['uid'], "+1 hour");
+                            }
+                            else {
+                                $return['code'] = 1;
+                                $this->addAttempt($ip);
+                                return $return;
+                            }
 
                             $return['code'] = 4;
                             $return['session_hash'] = $sessiondata['hash'];
@@ -461,10 +473,11 @@ class Auth
     /*
     * Creates a session for a specified user id
     * @param int $uid
+    * @param string $expire
     * @return array $data
     */
 
-    private function addNewSession($uid)
+    private function addNewSession($uid, $expire)
     {
         $query = $this->dbh->prepare("SELECT salt, lang FROM ".$this->config->table_users." WHERE id = ?");
         $query->execute(array($uid));
@@ -477,9 +490,8 @@ class Auth
 
         $ip = $this->getIp();
 
-        $data['expire'] = date("Y-m-d H:i:s", strtotime("+1 month"));
+        $data['expire'] = date("Y-m-d H:i:s", strtotime($expire));
         $data['cookie_crc'] = sha1($data['hash'] . $this->config->sitekey);
-
 
         $query = $this->dbh->prepare(
             "INSERT INTO ".$this->config->table_sessions." (uid, hash, expiredate, ip, agent, cookie_crc, lang) VALUES (?, ?, ?, ?, ?, ?, ?)"
