@@ -453,7 +453,7 @@ class Auth
     * @return array $data
     */
 
-    private function getUserData($username)
+    public function getUserData($username)
     {
         $data = array();
 
@@ -1360,8 +1360,8 @@ class Auth
     /*
     * Changes a user's email
     * @param int $uid
-    * @param string $currpass
-    * @param string $newpass
+    * @param string $email
+    * @param string $password
     * @return array $return
     */
 
